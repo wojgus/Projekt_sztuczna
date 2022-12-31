@@ -16,13 +16,7 @@ namespace Perceptron
             // to trzeba zabezpieczyć przed sytuacją gdy p i q są równe
             
             IEnumerable<double> wagi = WylosujWektorWag(p, q);
-
-
-            #region testowe sprawdzenie
-            int i = 0;
-            foreach (var waga in wagi)
-                Console.WriteLine($"w{i++} = {waga}");
-            #endregion
+            _ = new Perceptron(n, wagi, 0.5, 2, 1);
         }
 
         // nie wiem czy słusznie zakładam, że wagi myszą być unikatowe

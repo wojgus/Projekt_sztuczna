@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Perceptron
 {
     class Perceptron
     {
-        // prawdopodobnie czytelniej będzie działać na listach a nie tablicach
-
+        // można zamienić na pola, przy czym niektóre mogą być readonly
+        #region wlasciwosci klasy
         /// <summary>Liczba punktów w zbiorze uczącym</summary>
         int N { get; set; }
         /// <summary>Współczynnik uczenia</summary>
@@ -14,39 +15,71 @@ namespace Perceptron
         double[] Wagi { get; set; }     //w0. w1 i w2
         Punkt[] Punkty { get; set; }    //x1 i x2 n razy
         int[] Wartosci { get; set; }    //d n razy
-        double[] Sygnal { get; set; }   //s
-        double[] Wyjscia { get; set; }  //y
+        List<double> Sygnal { get; set; }   //s
+        List<int> Wyjscia { get; set; }  //y
         //int Epoka { get; set; }         //e
         int Czas { get; set; }          //t
+        #endregion
+
+        public Perceptron(int n, IEnumerable<double> wagi, double rho, double a, double b)
+        {
+            N = n;
+            Wagi = wagi.ToArray();
+            Rho = rho;
+            Czas = -1;
+            Punkty = WylosujNRoznychPunktow(N);
+            Wartosci = GetWartosciDlaPunktowIUnipolarnejFunkcjiAktywacji(Punkty, a, b);
+            Sygnal = new List<double>();
+            Wyjscia = new List<int>();
+
+            Console.WriteLine("Epoka | t | x0(t) | x1(t) |  x2(t) |  d(t) | w0(t) | w1(t) |  w2(t) |  s(t) | y(t) | ok?");
+
+            while (!Test())
+            {
+                WykonajKrok();
+                Console.Write($"{Czas / N + 1}| {Czas} | 1 | {Punkty[Czas % N].X} | {Punkty[Czas % N].Y} ");
+                Console.Write($"| {Wartosci[Czas % N]} ");
+                Console.Write($"| {Wagi[0]} | {Wagi[1]} | {Wagi[2]} | {Sygnal[Czas]} | {Wyjscia[Czas]} ");
+                Console.WriteLine(Wartosci[Czas % N] == Wyjscia[Czas] ? "| ok" : "| -");
+            }
+        }
 
         private void WykonajKrok()
         {
-            Czas++; // uwaga: czas starruje od -1
-            if (Czas != 0 && Wyjscia[Czas - 1] != Wartosci[Czas - 1])
+            Czas++; // uwaga: czas startuje od -1
+            if (Czas != 0)
             {
-                //todo: obliczenie nowych wag
+                int roznica = Wartosci[(Czas - 1) % N] - Wyjscia[Czas - 1];
+
+                // obliczenie nowego wektora wag
+                Wagi[0] = Wagi[0] + Rho * roznica;
+                Wagi[1] = Wagi[1] + Rho * roznica * Punkty[Czas % N].X;
+                Wagi[2] = Wagi[2] + Rho * roznica * Punkty[Czas % N].Y;
             }
 
-            Sygnal = Sygnal.Append(Wagi[0] + Punkty[Czas].X * Wagi[1] + Punkty[Czas].Y * Wagi[2]).ToArray();
-            Wyjscia = Wyjscia.Append(Sygnal[Czas] > 0 ? 1 : 0).ToArray();
+            // obliczenie sygnału i wyjścia
+            Sygnal.Add(Wagi[0] + Punkty[Czas % N].X * Wagi[1] + Punkty[Czas % N].Y * Wagi[2]);
+            Wyjscia.Add(Sygnal[Czas] > 0 ? 1 : 0);
         }
 
         private bool Test()
         {
+            if (Wyjscia.Count < N)
+                return false;
             for (int i = 0; i < N; i++)
-                if (Wyjscia[Czas - i] != Wartosci[Czas - i])
+                if (Wyjscia[Czas - i] != Wartosci[(Czas - i) % N])
                     return false;
             return true;
         }
 
-        private Punkt[] WylosujNRoznychPunktow(int n)
+        private static Punkt[] WylosujNRoznychPunktow(int n)
         {
             if (n < 1)
                 throw new ArgumentException("Niepoprawna wartość w parametrze metody WylosujNRoznychPunktow. Liczba punktów do wylosowania musi być dodatnia.");
 
-            var zwracanePunkty = new Punkt[n];
+            var zwracanePunkty = new List<Punkt>();
             Random rnd = new Random();
-            while (zwracanePunkty.Length < n)
+            while (zwracanePunkty.Count < n)
             {
                 Punkt punkt = new Punkt()
                 {
@@ -54,19 +87,19 @@ namespace Perceptron
                     Y = rnd.NextDouble() * (20) - 10
                 };
                 if (!zwracanePunkty.Where(p => p.X.Equals(punkt.X) && p.Y.Equals(punkt.Y)).Any())
-                    zwracanePunkty.Append(punkt);
+                    zwracanePunkty.Add(punkt);
             }
-            return zwracanePunkty;
+            return zwracanePunkty.ToArray();
         }
 
         private int[] GetWartosciDlaPunktowIUnipolarnejFunkcjiAktywacji(Punkt[] wejsciowePunkty, double a, double b)
         {
-            var zwracaneWartosci = new int[wejsciowePunkty.Length];
+            var zwracaneWartosci = new List<int>();
             foreach (var wejsciowyPunkt in wejsciowePunkty)
             {
-                zwracaneWartosci.Append(wejsciowyPunkt.Y > a * wejsciowyPunkt.X + b ? 1 : 0);
+                zwracaneWartosci.Add(wejsciowyPunkt.Y > a * wejsciowyPunkt.X + b ? 1 : 0);
             }
-            return zwracaneWartosci;
+            return zwracaneWartosci.ToArray();
         }
     }
 }
