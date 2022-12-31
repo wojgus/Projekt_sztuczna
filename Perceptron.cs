@@ -1,22 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Perceptron
 {
     class Perceptron
     {
-        /// <summary>Współczynnik uczenia</summary>
-        double Rho { get; set; } // może zamienić na decimal?
+        // prawdopodobnie czytelniej będzie działać na listach a nie tablicach
 
-        private IEnumerable<Punkt> WylosujNRoznychPunktow(int n)
+        /// <summary>Liczba punktów w zbiorze uczącym</summary>
+        int N { get; set; }
+        /// <summary>Współczynnik uczenia</summary>
+        double Rho { get; set; }
+        double[] Wagi { get; set; }     //w0. w1 i w2
+        Punkt[] Punkty { get; set; }    //x1 i x2 n razy
+        int[] Wartosci { get; set; }    //d n razy
+        double[] Sygnal { get; set; }   //s
+        double[] Wyjscia { get; set; }  //y
+        //int Epoka { get; set; }         //e
+        int Czas { get; set; }          //t
+
+        private void WykonajKrok()
+        {
+            Czas++; // uwaga: czas starruje od -1
+            if (Czas != 0 && Wyjscia[Czas - 1] != Wartosci[Czas - 1])
+            {
+                //todo: obliczenie nowych wag
+            }
+
+            Sygnal = Sygnal.Append(Wagi[0] + Punkty[Czas].X * Wagi[1] + Punkty[Czas].Y * Wagi[2]).ToArray();
+            Wyjscia = Wyjscia.Append(Sygnal[Czas] > 0 ? 1 : 0).ToArray();
+        }
+
+        private bool Test()
+        {
+            for (int i = 0; i < N; i++)
+                if (Wyjscia[Czas - i] != Wartosci[Czas - i])
+                    return false;
+            return true;
+        }
+
+        private Punkt[] WylosujNRoznychPunktow(int n)
         {
             if (n < 1)
                 throw new ArgumentException("Niepoprawna wartość w parametrze metody WylosujNRoznychPunktow. Liczba punktów do wylosowania musi być dodatnia.");
 
-            var zwracanePunkty = new List<Punkt>();
+            var zwracanePunkty = new Punkt[n];
             Random rnd = new Random();
-            while (zwracanePunkty.Count < n)
+            while (zwracanePunkty.Length < n)
             {
                 Punkt punkt = new Punkt()
                 {
@@ -24,25 +54,19 @@ namespace Perceptron
                     Y = rnd.NextDouble() * (20) - 10
                 };
                 if (!zwracanePunkty.Where(p => p.X.Equals(punkt.X) && p.Y.Equals(punkt.Y)).Any())
-                    zwracanePunkty.Add(punkt);
+                    zwracanePunkty.Append(punkt);
             }
             return zwracanePunkty;
         }
 
-        // Zmienić nazwę metody!
-        // Nie wiem czy o to w tym chodzi!
-        private IEnumerable<Punkt> GetWartosciDlaUnipolarnejFunkcjiAktywacji(IEnumerable<Punkt> wejsciowePunkty, double a, double b)
+        private int[] GetWartosciDlaPunktowIUnipolarnejFunkcjiAktywacji(Punkt[] wejsciowePunkty, double a, double b)
         {
-            var zwracanePunkty = new List<Punkt>();
+            var zwracaneWartosci = new int[wejsciowePunkty.Length];
             foreach (var wejsciowyPunkt in wejsciowePunkty)
             {
-                zwracanePunkty.Add(new Punkt()
-                {
-                    X = wejsciowyPunkt.X,
-                    Y = wejsciowyPunkt.Y > a * wejsciowyPunkt.X + b ? 1 : 0 // O to w tym chodzi?
-                });
+                zwracaneWartosci.Append(wejsciowyPunkt.Y > a * wejsciowyPunkt.X + b ? 1 : 0);
             }
-            return zwracanePunkty;
+            return zwracaneWartosci;
         }
     }
 }
