@@ -29,7 +29,7 @@ namespace Perceptron
             return zwracanePunkty;
         }
 
-        // Zmienić nazwę klasy!
+        // Zmienić nazwę metody!
         // Nie wiem czy o to w tym chodzi!
         private IEnumerable<Punkt> GetWartosciDlaUnipolarnejFunkcjiAktywacji(IEnumerable<Punkt> wejsciowePunkty, double a, double b)
         {

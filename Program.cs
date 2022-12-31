@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Perceptron
 {
@@ -9,8 +11,32 @@ namespace Perceptron
             int n = PobierzCalkowitaDodatniaLiczbeOdUzytkownika("Podaj liczbę badanych punktów:");
             double p = PobierzRzeczywistaLiczbeOdUzytkownika("Podaj początek przedziału dla wylosowania wag:");
             double q = PobierzRzeczywistaLiczbeOdUzytkownika("Podaj koniec przedziału dla wylosowania wag:");
+            
+            // jeżeli założenie, że wagi mają być unikatowe jest słuszne
+            // to trzeba zabezpieczyć przed sytuacją gdy p i q są równe
+            
+            IEnumerable<double> wagi = WylosujWektorWag(p, q);
 
 
+            #region testowe sprawdzenie
+            int i = 0;
+            foreach (var waga in wagi)
+                Console.WriteLine($"w{i++} = {waga}");
+            #endregion
+        }
+
+        // nie wiem czy słusznie zakładam, że wagi myszą być unikatowe
+        private static IEnumerable<double> WylosujWektorWag(double p, double q)
+        {
+            var zwracaneWagi = new List<double>();
+            Random rnd = new Random();
+            while (zwracaneWagi.Count < 3)
+            {
+                var wylosowanaWaga = rnd.NextDouble() * (p - q) + q;
+                if (!zwracaneWagi.Where(w => w == wylosowanaWaga).Any())
+                    zwracaneWagi.Add(wylosowanaWaga);
+            }
+            return zwracaneWagi;
         }
 
         private static int PobierzCalkowitaDodatniaLiczbeOdUzytkownika(string wyswietlanyTekst)
