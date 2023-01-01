@@ -11,12 +11,14 @@ namespace Perceptron
             int n = PobierzCalkowitaDodatniaLiczbeOdUzytkownika("Podaj liczbę badanych punktów:");
             double p = PobierzRzeczywistaLiczbeOdUzytkownika("Podaj początek przedziału dla wylosowania wag:");
             double q = PobierzRzeczywistaLiczbeOdUzytkownika("Podaj koniec przedziału dla wylosowania wag:");
-            
+            double a = PobierzRzeczywistaLiczbeOdUzytkownika("Podaj współczynnik kierunkowy funkcji:");
+            double b = PobierzRzeczywistaLiczbeOdUzytkownika("Podaj wyraz wolny funkcji:");
+
             // jeżeli założenie, że wagi mają być unikatowe jest słuszne
             // to trzeba zabezpieczyć przed sytuacją gdy p i q są równe
-            
+
             IEnumerable<double> wagi = WylosujWektorWag(p, q);
-            _ = new Perceptron(n, wagi, 0.5, 2, 1);
+            _ = new Perceptron(n, wagi, 0.5, a, b);
         }
 
         // nie wiem czy słusznie zakładam, że wagi myszą być unikatowe

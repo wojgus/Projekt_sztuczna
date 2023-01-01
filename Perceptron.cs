@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Perceptron
 {
@@ -32,15 +33,40 @@ namespace Perceptron
             Sygnal = new List<double>();
             Wyjscia = new List<int>();
 
-            Console.WriteLine("Epoka | t | x0(t) | x1(t) |  x2(t) |  d(t) | w0(t) | w1(t) |  w2(t) |  s(t) | y(t) | ok?");
+            Console.WriteLine("Epoka |  t | x0(t) | x1(t)                | x2(t)               |  d(t) | w0(t)               | w1(t)               |  w2(t)              |  s(t)               | y(t) | ok?");
 
             while (!Test())
             {
                 WykonajKrok();
-                Console.Write($"{Czas / N + 1}| {Czas} | 1 | {Punkty[Czas % N].X} | {Punkty[Czas % N].Y} ");
-                Console.Write($"| {Wartosci[Czas % N]} ");
-                Console.Write($"| {Wagi[0]} | {Wagi[1]} | {Wagi[2]} | {Sygnal[Czas]} | {Wyjscia[Czas]} ");
-                Console.WriteLine(Wartosci[Czas % N] == Wyjscia[Czas] ? "| ok" : "| -");
+                int doubleColumntotalWidth = 19;
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append(" ")
+                    .Append((Czas / N + 1).ToString().PadRight(5))
+                    .Append("| ")
+                    .Append(Czas.ToString().PadLeft(2))
+                    .Append(" |     1 | ")
+                    .Append(Punkty[Czas % N].X.ToString().PadLeft(20))
+                    .Append(" | ")
+                    .Append(Punkty[Czas % N].Y.ToString().PadLeft(doubleColumntotalWidth))
+                    .Append(" |     ")
+                    .Append(Wartosci[Czas % N])
+                    .Append(" | ")
+                    .Append(Wagi[0].ToString().PadLeft(doubleColumntotalWidth))
+                    .Append(" | ")
+                    .Append(Wagi[1].ToString().PadLeft(doubleColumntotalWidth))
+                    .Append(" | ")
+                    .Append(Wagi[2].ToString().PadLeft(doubleColumntotalWidth))
+                    .Append(" | ")
+                    .Append(Sygnal[Czas].ToString().PadLeft(doubleColumntotalWidth))
+                    .Append(" |    ")
+                    .Append(Wyjscia[Czas])
+                    .Append(Wartosci[Czas % N] == Wyjscia[Czas] ? " | ok" : " | -");
+                Console.WriteLine(sb.ToString());
+                //Console.Write($"{}| {Czas} | 1 | {Punkty[Czas % N].X} | {Punkty[Czas % N].Y} ");
+                //Console.Write($"| {Wartosci[Czas % N]} ");
+                //Console.Write($"| {Wagi[0]} | {Wagi[1]} | {Wagi[2]} | {Sygnal[Czas]} | {Wyjscia[Czas]} ");
+                //Console.WriteLine(Wartosci[Czas % N] == Wyjscia[Czas] ? "| ok" : "| -");
             }
         }
 
