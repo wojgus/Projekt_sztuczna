@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -33,7 +34,12 @@ namespace Perceptron
             Sygnal = new List<double>();
             Wyjscia = new List<int>();
 
-            Console.WriteLine("Epoka |  t | x0(t) | x1(t)                | x2(t)               |  d(t) | w0(t)               | w1(t)               |  w2(t)              |  s(t)               | y(t) | ok?");
+            string naglowek = "Epoka |  t | x0(t) | x1(t)                | x2(t)               |  d(t) | w0(t)               | w1(t)               |  w2(t)              |  s(t)               | y(t) | ok?";
+            
+            Console.WriteLine(naglowek);
+            
+            using StreamWriter sw = new StreamWriter("perceptron.txt");
+            sw.WriteLine(naglowek);
 
             while (!Test())
             {
@@ -63,6 +69,9 @@ namespace Perceptron
                     .Append(Wyjscia[Czas])
                     .Append(Wartosci[Czas % N] == Wyjscia[Czas] ? " | ok" : " | -");
                 Console.WriteLine(sb.ToString());
+
+                sw.WriteLine(sb.ToString());
+
                 //Console.Write($"{}| {Czas} | 1 | {Punkty[Czas % N].X} | {Punkty[Czas % N].Y} ");
                 //Console.Write($"| {Wartosci[Czas % N]} ");
                 //Console.Write($"| {Wagi[0]} | {Wagi[1]} | {Wagi[2]} | {Sygnal[Czas]} | {Wyjscia[Czas]} ");
