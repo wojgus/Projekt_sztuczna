@@ -62,6 +62,10 @@ namespace Perceptron
             streamWriter.WriteLine(sb.ToString());
         }
 
+        /// <summary>
+        /// Przeprowadza proces uczenia, wyświetla tabelę na standardowe wyjście oraz zapisuje do pliku.
+        /// Dodatkowo zamyka streamWriter'a
+        /// </summary>
         public void RozpocznijProcesUczenia()
         {
             string naglowek = "Epoka |  t | x0(t) | x1(t)                | x2(t)               |  d(t) | w0(t)               | w1(t)               |  w2(t)              |  s(t)               | y(t) | ok?";
