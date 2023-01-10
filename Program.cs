@@ -4,6 +4,11 @@ using System.Linq;
 
 namespace Perceptron
 {
+    // Program został napisany samodzielnie przez
+    // Tymoteusz Wośko
+    // Wojciech Gustaw
+    // Grzegorz Szewc
+
     class Program
     {
         static void Main(string[] args)
