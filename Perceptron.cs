@@ -20,6 +20,8 @@ namespace Perceptron
         List<int> Wyjscia { get; set; }  //y
         //int Epoka { get; set; }         //e
         int Czas { get; set; }          //t
+
+        StreamWriter streamWriter;
         #endregion
 
         public Perceptron(int n, IEnumerable<double> wagi, double rho, double a, double b)
@@ -32,6 +34,32 @@ namespace Perceptron
             Wartosci = GetWartosciDlaPunktowIUnipolarnejFunkcjiAktywacji(Punkty, a, b);
             Sygnal = new List<double>();
             Wyjscia = new List<int>();
+
+            streamWriter = new StreamWriter("perceptron.txt");
+        }
+
+        public void WyswietlIZapiszZbiorUczacy()
+        {
+            int doubleColumntotalWidth = 21;
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine().AppendLine("Zbiór uczący: ");
+            for (int i = 0; i < 3; i++)
+            {
+                sb.Append($"x({i})".PadRight(doubleColumntotalWidth)).Append("|");
+            }
+            sb.AppendLine(" d ");
+            for (int i = 0; i < N; i++)
+            {
+                sb.Append(1.ToString().PadRight(doubleColumntotalWidth)).Append("|");
+                sb.Append(Punkty[i].X.ToString().PadRight(doubleColumntotalWidth)).Append("|");
+                sb.Append(Punkty[i].Y.ToString().PadRight(doubleColumntotalWidth)).Append("| ");
+                sb.AppendLine(Wartosci[i].ToString());
+            }
+            sb.AppendLine();
+
+            Console.WriteLine(sb.ToString());
+
+            streamWriter.WriteLine(sb.ToString());
         }
 
         public void RozpocznijProcesUczenia()
@@ -40,8 +68,7 @@ namespace Perceptron
 
             Console.WriteLine(naglowek);
 
-            using StreamWriter sw = new StreamWriter("perceptron.txt");
-            sw.WriteLine(naglowek);
+            streamWriter.WriteLine(naglowek);
 
             while (!Test())
             {
@@ -73,13 +100,15 @@ namespace Perceptron
 
                 Console.WriteLine(sb.ToString());
 
-                sw.WriteLine(sb.ToString());
+                streamWriter.WriteLine(sb.ToString());
 
                 //Console.Write($"{}| {Czas} | 1 | {Punkty[Czas % N].X} | {Punkty[Czas % N].Y} ");
                 //Console.Write($"| {Wartosci[Czas % N]} ");
                 //Console.Write($"| {Wagi[0]} | {Wagi[1]} | {Wagi[2]} | {Sygnal[Czas]} | {Wyjscia[Czas]} ");
                 //Console.WriteLine(Wartosci[Czas % N] == Wyjscia[Czas] ? "| ok" : "| -");
             }
+
+            streamWriter.Close();
         }
 
         private void WykonajKrok()

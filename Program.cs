@@ -21,6 +21,7 @@ namespace Perceptron
 
             IEnumerable<double> wagi = WylosujWektorWag(p, q);
             var perceptron = new Perceptron(n, wagi, 0.5, a, b);
+            perceptron.WyswietlIZapiszZbiorUczacy();
             perceptron.RozpocznijProcesUczenia();
         }
 
