@@ -6,18 +6,17 @@ using System.Text;
 
 namespace Perceptron
 {
-    class Perceptron
+    public class Perceptron
     {
-        // można zamienić na pola, przy czym niektóre mogą być readonly
         #region wlasciwosci klasy
         /// <summary>Liczba punktów w zbiorze uczącym</summary>
         int N { get; set; }
         /// <summary>Współczynnik uczenia</summary>
         double Rho { get; set; }
-        double[] Wagi { get; set; }     //w0. w1 i w2
+        public double[] Wagi { get; set; }     //w0. w1 i w2
         Punkt[] Punkty { get; set; }    //x1 i x2 n razy
         int[] Wartosci { get; set; }    //d n razy
-        List<double> Sygnal { get; set; }   //s
+        public List<double> Sygnal { get; set; }   //s
         List<int> Wyjscia { get; set; }  //y
         //int Epoka { get; set; }         //e
         int Czas { get; set; }          //t
@@ -33,11 +32,14 @@ namespace Perceptron
             Wartosci = GetWartosciDlaPunktowIUnipolarnejFunkcjiAktywacji(Punkty, a, b);
             Sygnal = new List<double>();
             Wyjscia = new List<int>();
+        }
 
+        public void RozpocznijProcesUczenia()
+        {
             string naglowek = "Epoka |  t | x0(t) | x1(t)                | x2(t)               |  d(t) | w0(t)               | w1(t)               |  w2(t)              |  s(t)               | y(t) | ok?";
-            
+
             Console.WriteLine(naglowek);
-            
+
             using StreamWriter sw = new StreamWriter("perceptron.txt");
             sw.WriteLine(naglowek);
 
@@ -68,6 +70,7 @@ namespace Perceptron
                     .Append(" |    ")
                     .Append(Wyjscia[Czas])
                     .Append(Wartosci[Czas % N] == Wyjscia[Czas] ? " | ok" : " | -");
+
                 Console.WriteLine(sb.ToString());
 
                 sw.WriteLine(sb.ToString());
@@ -88,8 +91,10 @@ namespace Perceptron
 
                 // obliczenie nowego wektora wag
                 Wagi[0] = Wagi[0] + Rho * roznica;
-                Wagi[1] = Wagi[1] + Rho * roznica * Punkty[Czas % N].X;
-                Wagi[2] = Wagi[2] + Rho * roznica * Punkty[Czas % N].Y;
+                int idx = Czas % N - 1;
+                idx = idx >= 0 ? idx : N - 1;
+                Wagi[1] = Wagi[1] + Rho * roznica * Punkty[idx].X;
+                Wagi[2] = Wagi[2] + Rho * roznica * Punkty[idx].Y;
             }
 
             // obliczenie sygnału i wyjścia
@@ -127,7 +132,7 @@ namespace Perceptron
             return zwracanePunkty.ToArray();
         }
 
-        private int[] GetWartosciDlaPunktowIUnipolarnejFunkcjiAktywacji(Punkt[] wejsciowePunkty, double a, double b)
+        private static int[] GetWartosciDlaPunktowIUnipolarnejFunkcjiAktywacji(Punkt[] wejsciowePunkty, double a, double b)
         {
             var zwracaneWartosci = new List<int>();
             foreach (var wejsciowyPunkt in wejsciowePunkty)
@@ -136,5 +141,17 @@ namespace Perceptron
             }
             return zwracaneWartosci.ToArray();
         }
+
+        #region metody na potrzeby testów jednostkowych
+        public void SetPunkty(Punkt[] punkty)
+        {
+            this.Punkty = punkty;
+        }
+
+        public void SetWartosci(int[] wartosci)
+        {
+            this.Wartosci = wartosci;
+        }
+        #endregion
     }
 }

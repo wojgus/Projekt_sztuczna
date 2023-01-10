@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32929.386
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perceptron", "Perceptron.csproj", "{45B2952B-86DF-453F-8F46-B9B6A1751F41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perceptron", "Perceptron.csproj", "{45B2952B-86DF-453F-8F46-B9B6A1751F41}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerceptronTests", "..\TestPerceptron\PerceptronTests.csproj", "{B7A943A4-00D1-4BBF-8567-723524D882EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{45B2952B-86DF-453F-8F46-B9B6A1751F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45B2952B-86DF-453F-8F46-B9B6A1751F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45B2952B-86DF-453F-8F46-B9B6A1751F41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7A943A4-00D1-4BBF-8567-723524D882EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7A943A4-00D1-4BBF-8567-723524D882EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7A943A4-00D1-4BBF-8567-723524D882EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7A943A4-00D1-4BBF-8567-723524D882EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

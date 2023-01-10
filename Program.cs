@@ -14,23 +14,21 @@ namespace Perceptron
             double a = PobierzRzeczywistaLiczbeOdUzytkownika("Podaj współczynnik kierunkowy funkcji:");
             double b = PobierzRzeczywistaLiczbeOdUzytkownika("Podaj wyraz wolny funkcji:");
 
-            // jeżeli założenie, że wagi mają być unikatowe jest słuszne
-            // to trzeba zabezpieczyć przed sytuacją gdy p i q są równe
-
             IEnumerable<double> wagi = WylosujWektorWag(p, q);
-            _ = new Perceptron(n, wagi, 0.5, a, b);
+            var perceptron = new Perceptron(n, wagi, 0.5, a, b);
+            perceptron.RozpocznijProcesUczenia();
         }
 
-        // nie wiem czy słusznie zakładam, że wagi myszą być unikatowe
         private static IEnumerable<double> WylosujWektorWag(double p, double q)
         {
             var zwracaneWagi = new List<double>();
             Random rnd = new Random();
             while (zwracaneWagi.Count < 3)
             {
-                var wylosowanaWaga = rnd.NextDouble() * (p - q) + q;
-                if (!zwracaneWagi.Where(w => w == wylosowanaWaga).Any())
-                    zwracaneWagi.Add(wylosowanaWaga);
+                //var wylosowanaWaga = rnd.NextDouble() * (p - q) + q;
+                //if (!zwracaneWagi.Where(w => w == wylosowanaWaga).Any())
+                //zwracaneWagi.Add(wylosowanaWaga);
+                zwracaneWagi.Add(rnd.NextDouble() * (p - q) + q);
             }
             return zwracaneWagi;
         }
