@@ -24,6 +24,8 @@ namespace Perceptron
         StreamWriter streamWriter;
         #endregion
 
+        private readonly string _doubleFormat = "0.##";
+
         public Perceptron(int n, IEnumerable<double> wagi, double rho, double a, double b)
         {
             N = n;
@@ -40,7 +42,7 @@ namespace Perceptron
 
         public void WyswietlIZapiszZbiorUczacy()
         {
-            int doubleColumntotalWidth = 21;
+            int doubleColumntotalWidth = 7;
             StringBuilder sb = new StringBuilder();
             sb.AppendLine().AppendLine("Zbiór uczący: ");
             for (int i = 0; i < 3; i++)
@@ -50,9 +52,9 @@ namespace Perceptron
             sb.AppendLine(" d ");
             for (int i = 0; i < N; i++)
             {
-                sb.Append(1.ToString().PadRight(doubleColumntotalWidth)).Append("|");
-                sb.Append(Punkty[i].X.ToString().PadRight(doubleColumntotalWidth)).Append("|");
-                sb.Append(Punkty[i].Y.ToString().PadRight(doubleColumntotalWidth)).Append("| ");
+                sb.Append(1.ToString(_doubleFormat).PadRight(doubleColumntotalWidth)).Append("|");
+                sb.Append(Punkty[i].X.ToString(_doubleFormat).PadRight(doubleColumntotalWidth)).Append("|");
+                sb.Append(Punkty[i].Y.ToString(_doubleFormat).PadRight(doubleColumntotalWidth)).Append("| ");
                 sb.AppendLine(Wartosci[i].ToString());
             }
             sb.AppendLine();
@@ -68,7 +70,7 @@ namespace Perceptron
         /// </summary>
         public void RozpocznijProcesUczenia()
         {
-            string naglowek = "Epoka |  t | x0(t) | x1(t)                | x2(t)               |  d(t) | w0(t)               | w1(t)               |  w2(t)              |  s(t)               | y(t) | ok?";
+            string naglowek = "Epoka |  t | x0(t) | x1(t)   | x2(t)   |  d(t) | w0(t)   | w1(t)   |  w2(t)  |  s(t)   | y(t) | ok?";
 
             Console.WriteLine(naglowek);
 
@@ -77,7 +79,7 @@ namespace Perceptron
             while (!Test())
             {
                 WykonajKrok();
-                int doubleColumntotalWidth = 19;
+                int doubleColumntotalWidth = 7;
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append(" ")
@@ -85,19 +87,19 @@ namespace Perceptron
                     .Append("| ")
                     .Append(Czas.ToString().PadLeft(2))
                     .Append(" |     1 | ")
-                    .Append(Punkty[Czas % N].X.ToString().PadLeft(20))
+                    .Append(Punkty[Czas % N].X.ToString(_doubleFormat).PadLeft(doubleColumntotalWidth))
                     .Append(" | ")
-                    .Append(Punkty[Czas % N].Y.ToString().PadLeft(doubleColumntotalWidth))
+                    .Append(Punkty[Czas % N].Y.ToString(_doubleFormat).PadLeft(doubleColumntotalWidth))
                     .Append(" |     ")
                     .Append(Wartosci[Czas % N])
                     .Append(" | ")
-                    .Append(Wagi[0].ToString().PadLeft(doubleColumntotalWidth))
+                    .Append(Wagi[0].ToString(_doubleFormat).PadLeft(doubleColumntotalWidth))
                     .Append(" | ")
-                    .Append(Wagi[1].ToString().PadLeft(doubleColumntotalWidth))
+                    .Append(Wagi[1].ToString(_doubleFormat).PadLeft(doubleColumntotalWidth))
                     .Append(" | ")
-                    .Append(Wagi[2].ToString().PadLeft(doubleColumntotalWidth))
+                    .Append(Wagi[2].ToString(_doubleFormat).PadLeft(doubleColumntotalWidth))
                     .Append(" | ")
-                    .Append(Sygnal[Czas].ToString().PadLeft(doubleColumntotalWidth))
+                    .Append(Sygnal[Czas].ToString(_doubleFormat).PadLeft(doubleColumntotalWidth))
                     .Append(" |    ")
                     .Append(Wyjscia[Czas])
                     .Append(Wartosci[Czas % N] == Wyjscia[Czas] ? " | ok" : " | -");
@@ -156,8 +158,8 @@ namespace Perceptron
             {
                 Punkt punkt = new Punkt()
                 {
-                    X = rnd.NextDouble() * (20) - 10,
-                    Y = rnd.NextDouble() * (20) - 10
+                    X = Math.Round(rnd.NextDouble() * (20) - 10, 2),
+                    Y = Math.Round(rnd.NextDouble() * (20) - 10, 2)
                 };
                 if (!zwracanePunkty.Where(p => p.X.Equals(punkt.X) && p.Y.Equals(punkt.Y)).Any())
                     zwracanePunkty.Add(punkt);

@@ -34,7 +34,7 @@ namespace Perceptron
                 //var wylosowanaWaga = rnd.NextDouble() * (p - q) + q;
                 //if (!zwracaneWagi.Where(w => w == wylosowanaWaga).Any())
                 //zwracaneWagi.Add(wylosowanaWaga);
-                zwracaneWagi.Add(rnd.NextDouble() * (p - q) + q);
+                zwracaneWagi.Add(Math.Round(rnd.NextDouble() * (p - q) + q, 2));
             }
             return zwracaneWagi;
         }
